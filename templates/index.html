@@ -5,6 +5,8 @@
     <link rel="stylesheet" href="../static/css/main.css" />
 	  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" />
 	  <script src="https://unpkg.com/leaflet@1.0.1/dist/leaflet.js"></script>
+    <script src="https://www.mapquestapi.com/sdk/leaflet/v2.2/mq-map.js?key={{session.key}}"></script>
+    <script src="https://www.mapquestapi.com/sdk/leaflet/v2.2/mq-geocoding.js?key={{session.key}}"></script>
   </head>
   <body>
     <div id="mapid">
@@ -13,20 +15,21 @@
         L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
           attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(mymap);
+        var geocode = MQ.geocode().on('success', function(e) {
+          popup.setContent(geocode.describeLocation(e.result.best));
+        });
         var popup = L.popup();
         function onMapClick(e) {
-          popup
-            .setLatLng(e.latlng)
-            .setContent(e.latlng.toString())
-            .openOn(mymap);
+          popup.setLatLng(e.latlng).openOn(mymap);
+          geocode.reverse(e.latlng);
         }
         mymap.on('click', onMapClick);
+
         {% for entry in session.points %}
           var latitude = {{entry.Latitude}};
           var longitude = {{entry.Longitude}};
           var description = '{{entry.Description}}';
-          L.marker([latitude, longitude]).addTo(mymap)
-            .bindPopup("One of my (almost) daily stops: " + description);
+          L.marker([latitude, longitude]).addTo(mymap).bindPopup("One of my (almost) daily stops: " + description);
         {% endfor %}
       </script>
     </div>

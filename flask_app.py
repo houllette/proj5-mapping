@@ -5,6 +5,7 @@ import logging
 
 # Our own module
 import POI_list
+import secrets
 
 ###
 # Globals
@@ -24,6 +25,7 @@ app.secret_key = CONFIG.secret_key  # Should allow using session variables
 @app.route("/index")
 def index():
   app.logger.debug("Main page entry")
+  flask.session["key"] = secrets.dev_key
   flask.session["points"] = POI_list.process()
 
   return flask.render_template('index.html')
