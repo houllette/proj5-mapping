@@ -42,7 +42,7 @@ run:	env
 #
 service:	env
 	echo "Launching green unicorn in background"
-	($(INVENV) gunicorn --bind="0.0.0.0:8000" secrets:app )&
+	($(INVENV) gunicorn --bind="0.0.0.0:8000" flask_app:app )&
 
 ##
 ## Run test suite.
@@ -52,12 +52,14 @@ service:	env
 test:	env
 	$(INVENV) nosetests
 
+
 ##
 ## Preserve virtual environment for git repository
 ## to duplicate it on other targets
 ##
 dist:	env
 	$(INVENV) pip freeze >requirements.txt
+
 
 # 'clean' and 'veryclean' are typically used before checking
 # things into git.  'clean' should leave the project ready to
