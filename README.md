@@ -14,10 +14,10 @@ Longitude coordinates of that location are Reverse Geocoded to the closest addre
 	cd proj5-mapping
 	bash ./configure
 	make run
-  ```
+    ```
 
-## Testing the application ##
-Test this server by following the RUNNING instructions and attempt to connect to the server.
-
-To run automated tests:  
-	make test
+    The program will also run using gunicorn by running
+    ```bash
+    make service
+    ```
+    This only works if you have already run bash ./configure
